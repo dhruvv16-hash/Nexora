@@ -1084,14 +1084,14 @@ def app(environ, start_response):
     query = environ.get('QUERY_STRING', '')
     method = environ.get('REQUEST_METHOD', 'GET')
     
-    if path == '/' or path == '/index.html':
+    if path in ['/', '/index.html']:
         if os.path.exists('index.html'):
             with open('index.html', 'rb') as f:
                 content = f.read()
             start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'), ('Content-Length', str(len(content)))])
             return [content]
 
-    if path == '/api/get-settings':
+    if path in ['/api/get-settings', '/get-settings']:
         data = json.dumps({
             'clerkKey': os.environ.get('CLERK_PUBLISHABLE_KEY', ''),
             'anthropicKey': os.environ.get('ANTHROPIC_API_KEY', ''),
@@ -1104,7 +1104,7 @@ def app(environ, start_response):
         start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
         return [data]
 
-    if path.startswith('/api/search'):
+    if '/search' in path:
         parsed = urllib.parse.parse_qs(query)
         q = parsed.get('q', [''])[0]
         results = search_instruments(q)
@@ -1112,7 +1112,7 @@ def app(environ, start_response):
         start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
         return [data]
 
-    if path.startswith('/api/cmp'):
+    if '/cmp' in path:
         parsed = urllib.parse.parse_qs(query)
         sym = parsed.get('symbol', ['RELIANCE.NS'])[0]
         exch = parsed.get('exchange', ['NSE'])[0]
@@ -1121,7 +1121,7 @@ def app(environ, start_response):
         start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
         return [data]
 
-    if path.startswith('/api/info'):
+    if '/info' in path:
         parsed = urllib.parse.parse_qs(query)
         sym = parsed.get('symbol', ['RELIANCE.NS'])[0]
         exch = parsed.get('exchange', ['NSE'])[0]
@@ -1130,7 +1130,7 @@ def app(environ, start_response):
         start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
         return [data]
 
-    if path == '/api/research-analyze' and method == 'POST':
+    if ('/research-analyze' in path) and method == 'POST':
         try:
             length = int(environ.get('CONTENT_LENGTH', 0))
             body = environ['wsgi.input'].read(length) if length > 0 else b'{}'
