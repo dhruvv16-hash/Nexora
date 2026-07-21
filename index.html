@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexora — The Next Era of Investing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050816;
+            --card-bg: rgba(11, 18, 32, 0.85);
+            --card-bg-solid: #0B1220;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-primary: #e8eaed;
+            --text-secondary: #6b7280;
+            --accent-green: #10b981;
+            --accent-green-glow: rgba(16, 185, 129, 0.12);
+            --accent-red: #ef4444;
+            --accent-red-glow: rgba(239, 68, 68, 0.12);
+            --accent-amber: #f59e0b;
+            --primary-blue: #3b82f6;
+            --glow-color: rgba(59, 130, 246, 0.3);
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        header {
+            width: 100%;
+            max-width: 960px;
+            padding: 32px 24px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+        }
+
+        .logo-accent {
+            color: var(--primary-blue);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: transparent;
+            padding: 6px 14px;
+            border-radius: 99px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        main {
+            width: 100%;
+            max-width: 960px;
+            padding: 0 24px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin: 0 auto;
+        }
+
+        /* Search Section */
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: var(--card-bg-solid);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            padding: 4px 6px;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+        }
+
+        .search-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            padding: 14px 16px;
+            font-weight: 400;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .search-icon {
+            color: var(--text-secondary);
+            margin-left: 16px;
+        }
+
+        /* Autocomplete Dropdown */
+        .autocomplete-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: var(--card-bg-solid);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .autocomplete-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .autocomplete-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .item-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .item-symbol {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .item-exchange {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+        }
+
+        .item-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .item-type {
+            font-size: 0.8rem;
+            color: var(--primary-blue);
+            font-weight: 500;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .quick-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 7px 16px;
+            border-radius: 99px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .quick-btn:hover {
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Info Message */
+        .info-card {
+            background: var(--card-bg-solid);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 48px 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* Stock Details Display Card */
+        .stock-card {
+            background: var(--card-bg-solid);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            display: none;
+            flex-direction: column;
+            gap: 24px;
+            transition: opacity 0.25s ease;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .stock-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stock-symbol-badge {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stock-sym {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .stock-exch {
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .stock-type {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Price Panel */
+        .price-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .price-val {
+            font-size: 2.8rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+
+        .price-change-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 99px;
+            margin-top: 8px;
+            width: fit-content;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        @media (min-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-lbl {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .stat-val {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Auto update text */
+        .update-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+        }
+
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .price-up {
+            color: var(--accent-green);
+            text-shadow: 0 0 15px var(--accent-green-glow);
+        }
+        .price-down {
+            color: var(--accent-red);
+            text-shadow: 0 0 15px var(--accent-red-glow);
+        }
+        .bg-up {
+            background: var(--accent-green-glow);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .bg-down {
+            background: var(--accent-red-glow);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .pulse-green {
+            animation: pulse-green-glow 0.5s ease;
+        }
+        .pulse-red {
+            animation: pulse-red-glow 0.5s ease;
+        }
+
+        @keyframes pulse-green-glow {
+            0% { background-color: rgba(16, 185, 129, 0.4); }
+            100% { background-color: transparent; }
+        }
+        @keyframes pulse-red-glow {
+            0% { background-color: rgba(239, 68, 68, 0.4); }
+            100% { background-color: transparent; }
+        }
+
+        .fundamentals-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .fundamentals-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .fund-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .fund-lbl {
+            color: var(--text-secondary);
+        }
+
+        .fund-val {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .qa-item {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid var(--primary-blue);
+            border-radius: 0 8px 8px 0;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .qa-q {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .qa-a {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Chatbot Styles */
+        .chat-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            outline: none;
+            flex-shrink: 0;
+        }
+
+        .chat-pill:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border-color: var(--text-secondary);
+        }
+
+        .chat-msg-user {
+            align-self: flex-end;
+            max-width: 85%;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 12px 12px 0 12px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .chat-msg-bot {
+            align-self: flex-start;
+            max-width: 85%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 0 12px 12px 12px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+        
+        .chat-msg-bot b {
+            color: var(--accent-green);
+        }
+        
+        .chat-msg-bot code {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+
+        /* Sidebar & Layout Styles */
+        .app-layout {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--card-bg-solid);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-link svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2px;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .sidebar-link.active {
+            color: var(--primary-blue);
+            background-color: rgba(59, 130, 246, 0.08);
+        }
+
+        .sidebar-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 40px 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            max-width: 1000px;
+        }
+
+        /* Views */
+        .dashboard-view {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            width: 100%;
+        }
+
+        /* Welcome Page Styles */
+        .welcome-hero {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.04) 0%, rgba(139, 92, 246, 0.02) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 44px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-hero::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        .welcome-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 640px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .feature-card {
+            background: var(--card-bg-solid);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(59, 130, 246, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon-wrapper {
+            width: 38px;
+            height: 38px;
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+        }
+
+        .feature-icon-wrapper svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2px;
+        }
+
+        .feature-title {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .welcome-cta-btn {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: fit-content;
+            transition: background 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .welcome-cta-btn:hover {
+            background: #2563eb;
+        }
+
+        /* Integration view table styling */
+        .integrations-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .integrations-table th {
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .integrations-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .integrations-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Responsive sidebar adjustments */
+        @media (max-width: 768px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 16px 20px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .sidebar-logo {
+                margin-bottom: 0;
+            }
+
+            .sidebar-menu {
+                flex-direction: row;
+                gap: 8px;
+                flex: 0;
+            }
+
+            .sidebar-link {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                gap: 6px;
+            }
+
+            .sidebar-link span {
+                display: none; /* Hide link labels on very small screens to fit */
+            }
+
+            .sidebar-link svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            .sidebar-footer {
+                display: none; /* Hide on mobile navbar */
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px 20px;
+            }
+        }
+
+        /* Profile & Settings Page Styles */
+        .profile-card {
+            background: var(--card-bg-solid);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .profile-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .profile-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .profile-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .profile-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .profile-input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .profile-input:focus {
+            border-color: var(--primary-blue);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+        }
+
+        .profile-select {
+            background-color: #0c1020;
+            cursor: pointer;
+        }
+
+        .profile-save-btn {
+            background: var(--primary-blue);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: fit-content;
+            align-self: flex-start;
+            transition: opacity 0.2s, background-color 0.2s;
+        }
+
+        .profile-save-btn:hover {
+            opacity: 0.9;
+        }
+
+        .profile-save-btn:active {
+            transform: scale(0.98);
+        }
+
+        .profile-status {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .profile-status.success {
+            display: block;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+
+        .profile-status.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+    </style>
+    <!-- Preconnect to Clerk for fast DNS lookup and handshake -->
+    <link rel="preconnect" href="https://{{CLERK_DOMAIN}}" crossorigin>
+    <link rel="dns-prefetch" href="https://{{CLERK_DOMAIN}}">
+    <!-- Load ClerkJS statically and asynchronously -->
+    <script src="https://{{CLERK_DOMAIN}}/npm/@clerk/clerk-js@5/dist/clerk.browser.js" data-clerk-publishable-key="{{CLERK_PUBLISHABLE_KEY}}" async crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- App Container -->
+    <div id="appContent" style="display: none; min-height: 100vh; width: 100%;">
+        <div class="app-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"/>
+                        <path d="m19 9-5 5-4-4-3 3"/>
+                    </svg>
+                    <span>NEXORA</span>
+                </div>
+                <nav class="sidebar-menu">
+                    <a class="sidebar-link active" onclick="switchView('viewWelcome')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        <span>Overview</span>
+                    </a>
+                    <a class="sidebar-link" onclick="switchView('viewTerminal')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <span>Market Terminal</span>
+                    </a>
+                    <a class="sidebar-link" onclick="switchView('viewResearch')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
+                        <span>Deep Research</span>
+                    </a>
+                    <a class="sidebar-link" onclick="switchView('viewIntegrations')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 4a2 2 0 114 0v1a2 2 0 01-2 2H3a2 2 0 01-2-2V5a2 2 0 012-2h8zM19 13a2 2 0 114 0v1a2 2 0 01-2 2h-8a2 2 0 01-2-2v-1a2 2 0 012-2h8zM7 21a2 2 0 114 0v1a2 2 0 01-2 2H1a2 2 0 01-2-2v-1a2 2 0 012-2h4z"/></svg>
+                        <span>Integrations & Data</span>
+                    </a>
+                    <a class="sidebar-link" onclick="switchView('viewProfile')">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span>Profile & Settings</span>
+                    </a>
+                </nav>
+                <div class="sidebar-footer">
+                    <div class="status-badge" style="border: none; padding: 0;">
+                        <div class="status-dot"></div>
+                        <span style="font-size: 0.75rem; margin-left: 6px;">Live Feed</span>
+                    </div>
+                    <div id="userButton"></div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- VIEW 1: WELCOME / OVERVIEW -->
+                <div id="viewWelcome" class="dashboard-view">
+                    <div class="welcome-hero">
+                        <h1 class="welcome-title">Welcome to Nexora</h1>
+                        <p class="welcome-subtitle">
+                            An institutional-grade investment research platform powered by multi-source data compilation and cynical AI analytics. Nexora bypasses market noise to expose direct financial truths.
+                        </p>
+                        <button class="welcome-cta-btn" onclick="switchView('viewTerminal')">Open Market Terminal ➜</button>
+                    </div>
+
+                    <h2 style="font-size: 1.1rem; font-weight: 600; margin-top: 10px; color: var(--text-primary);">Core Platform Capabilities</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon-wrapper">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            </div>
+                            <h3 class="feature-title">Real-Time Data Engine</h3>
+                            <p class="feature-desc">Track live market pricing (CMP), percentage shifts, and key technical ratios across Indian (NSE, BSE) and US exchanges dynamically.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon-wrapper">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            </div>
+                            <h3 class="feature-title">6-Document Data Scraper</h3>
+                            <p class="feature-desc">Scrapes annual financials, management transcripts, proxy reports, technical charts, screener ratios, and shareholding metrics simultaneously.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon-wrapper">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 01-2 2h0a2 2 0 01-2-2v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                            </div>
+                            <h3 class="feature-title">Cynical AI Thesis Builder</h3>
+                            <p class="feature-desc">Processes the raw compiled documents using Claude-3.5-Sonnet with an uncompromised, institutional-grade cynicism to expose hidden risks.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon-wrapper">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                            </div>
+                            <h3 class="feature-title">Interactive AI Assistant</h3>
+                            <p class="feature-desc">Engage with our context-aware agent. Resolves intents using robust word token matching to deliver instant answers without false positive overlaps.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: MARKET TERMINAL -->
+                <div id="viewTerminal" class="dashboard-view" style="display: none;">
+                    <!-- Search -->
+                    <div class="search-container">
+                        <div class="search-wrapper">
+                            <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="searchBar" class="search-input" placeholder="Search stocks" autocomplete="off">
+                        </div>
+                        <div id="dropdown" class="autocomplete-dropdown"></div>
+                    </div>
+
+                    <!-- Placeholder info -->
+                    <div id="infoCard" class="info-card">
+                        <div style="font-size: 1.6rem; color: var(--text-secondary); margin-bottom: 4px;">🔍</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 600; letter-spacing: -0.02em;">What do you want to research today?</h3>
+                        <p style="color: var(--text-secondary); max-width: 380px; font-size: 0.85rem; line-height: 1.5;">
+                            Search any company by ticker or name. NSE, BSE, and US exchanges supported.
+                        </p>
+                    </div>
+
+                    <!-- Stock Details Card -->
+                    <div id="stockCard" class="stock-card">
+                        <div class="card-header">
+                            <div class="stock-title-area">
+                                <div class="stock-symbol-badge">
+                                    <span id="cardSymbol" class="stock-sym">-</span>
+                                    <span id="cardExch" class="stock-exch">-</span>
+                                </div>
+                                <span id="cardType" class="stock-type">-</span>
+                            </div>
+                        </div>
+
+                        <div class="price-panel">
+                            <div class="price-left">
+                                <span class="price-label">Current Market Price (CMP)</span>
+                                <span id="cardPrice" class="price-val">-</span>
+                            </div>
+                            <div id="cardChangeBadge" class="price-change-badge">
+                                <span id="cardChange">-</span>
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-lbl">Open</span>
+                                <span id="statOpen" class="stat-val">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-lbl">Day High</span>
+                                <span id="statHigh" class="stat-val">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-lbl">Day Low</span>
+                                <span id="statLow" class="stat-val">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-lbl">Volume</span>
+                                <span id="statVol" class="stat-val">-</span>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
+
+                        <!-- Fundamentals Section -->
+                        <div class="fundamentals-section">
+                            <h4 style="margin-bottom: 16px; font-weight: 600; letter-spacing: -0.01em; color: var(--primary-blue);">Key Fundamentals</h4>
+                            <div id="fundamentalsLoading" style="color: var(--text-secondary); font-size: 0.9rem;">Loading fundamental data...</div>
+                            <div id="fundamentalsGrid" class="fundamentals-grid" style="display: none;">
+                                <div class="fund-item"><span class="fund-lbl">Market Cap</span><span id="fundMarketCap" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">P/E Ratio</span><span id="fundPE" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">EPS (Trailing)</span><span id="fundEPS" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">P/B Ratio</span><span id="fundPB" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">Div. Yield</span><span id="fundDiv" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">Beta</span><span id="fundBeta" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">52W High</span><span id="fundHigh52" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">52W Low</span><span id="fundLow52" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">Revenue</span><span id="fundRevenue" class="fund-val">-</span></div>
+                                <div class="fund-item"><span class="fund-lbl">Profit Margin</span><span id="fundMargin" class="fund-val">-</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
+
+                        <!-- Q&A Section -->
+                        <div class="qa-section">
+                            <h4 style="margin-bottom: 16px; font-weight: 600; letter-spacing: -0.01em; color: var(--accent-green);">Company Profile & Insights (Q&A)</h4>
+                            <div id="qaLoading" style="color: var(--text-secondary); font-size: 0.9rem;">Loading profile...</div>
+                            <div id="qaContainer" class="qa-container" style="display: none; flex-direction: column;"></div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
+
+                        <!-- AI Deep Research Section Trigger -->
+                        <div style="margin: 15px 0; text-align: center;">
+                            <button onclick="triggerResearchFromTerminal()" style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); border: none; color: white; padding: 12px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; transition: all 0.2s; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2); font-family: inherit; font-size: 0.9rem;">
+                                <span>🔬</span> Run AI Deep Research (6 Documents)
+                            </button>
+                        </div>
+
+                        <!-- Divider -->
+                        <div style="height: 1px; background: var(--border-color); margin: 15px 0;"></div>
+
+                        <div class="update-info">
+                            <span>Auto-refreshing every 5s</span>
+                            <span id="lastUpdated">Last update: -</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 3: AI RESEARCH HUB -->
+                <div id="viewResearch" class="dashboard-view" style="display: none;">
+                    <div class="welcome-hero" style="padding: 30px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.04) 0%, rgba(59, 130, 246, 0.01) 100%);">
+                        <h2 class="welcome-title" style="font-size: 1.4rem;">AI Deep Research Hub</h2>
+                        <p class="welcome-subtitle" style="font-size: 0.85rem; max-width: 550px;">
+                            Trigger the research engine from the <b>Market Terminal</b>. Active data collections and Claude analyst verdicts will populate below.
+                        </p>
+                    </div>
+
+                    <div id="noResearchRunning" class="info-card" style="border: 1px dashed var(--border-color); background: transparent; padding: 40px; display: flex;">
+                        <span style="font-size: 1.5rem; margin-bottom: 4px;">⏱️</span>
+                        <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 2px;">No Active Research Session</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.85rem; max-width: 320px; line-height: 1.4;">Select a stock in the Market Terminal and click "Run AI Deep Research" to start.</p>
+                    </div>
+
+                    <!-- Deep Research Panel -->
+                    <div id="researchCard" class="stock-card" style="display: none; border: 1px solid rgba(139, 92, 246, 0.3); background: var(--card-bg-solid); box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15); flex-direction: column; width: 100%; padding: 25px; border-radius: 20px; gap: 20px;">
+                        <div class="card-header" style="border-bottom: 1px solid rgba(139, 92, 246, 0.2); padding-bottom: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 1.8rem;">🔬</span>
+                                <div>
+                                    <h3 id="researchTitle" style="font-weight: 700; letter-spacing: -0.02em; color: #a78bfa; font-size: 1.25rem;">AI Research Engine</h3>
+                                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">Grounded & hallucination-free stock analysis</p>
+                                </div>
+                            </div>
+                            <button onclick="closeResearch()" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.5rem; outline: none; display: flex; align-items: center;">&times;</button>
+                        </div>
+
+                        <!-- Progress Tracker -->
+                        <div id="researchProgress" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: #a78bfa;">
+                                <span id="researchProgressText">Collecting 6 Documents...</span>
+                                <span id="researchProgressPct">0%</span>
+                            </div>
+                            <div style="height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; position: relative;">
+                                <div id="researchProgressBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.3s; border-radius: 3px;"></div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; font-size: 0.8rem; margin-top: 5px; background: rgba(255,255,255,0.02); border-radius: 12px; padding: 15px; border: 1px solid var(--border-color);">
+                                <div id="step1" style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">⚪ 1. Annual Financials</div>
+                                <div id="step2" style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">⚪ 2. MDA Report (Proxy)</div>
+                                <div id="step3" style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">⚪ 3. Concall Transcripts</div>
+                                <div id="step4" style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">⚪ 4. Technical Chart & EMAs</div>
+                                <div id="step5" style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">⚪ 5. Screener.in Metrics</div>
+                                <div id="step6" style="color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">⚪ 6. Shareholding Pattern</div>
+                            </div>
+                        </div>
+
+                        <!-- Settings / Keys Config -->
+                        <div id="researchKeyWarning" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); padding: 15px; border-radius: 12px; margin-bottom: 10px; font-size: 0.85rem; flex-direction: column;">
+                            <p style="color: #f87171; font-weight: 600; margin-bottom: 8px;">⚠️ Anthropic API Key Required</p>
+                            <p style="color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">Claude API is needed to process and analyze the collected payload. Please enter your API key to proceed:</p>
+                            <div style="display: flex; gap: 10px; width: 100%;">
+                                <input type="password" id="anthropicKeyInput" placeholder="sk-ant-..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 14px; color: white; font-size: 0.85rem; outline: none; font-family: monospace;">
+                                <button onclick="saveAnthropicKey()" style="background: var(--primary-blue); border: none; color: white; border-radius: 8px; padding: 0 18px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;">Save Key</button>
+                            </div>
+                        </div>
+
+                        <!-- Collected Data Summary View -->
+                        <div id="researchDataArea" style="display: none; flex-direction: column; gap: 20px; width: 100%;">
+                            <!-- Chart Preview -->
+                            <div style="text-align: center; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; border: 1px solid var(--border-color);">
+                                <h4 style="color: var(--primary-blue); margin-bottom: 12px; font-size: 0.95rem; text-align: left; font-weight: 600;">Technical Chart (1D)</h4>
+                                <img id="researchChartImg" style="width: 100%; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);" alt="Technical Analysis Chart">
+                            </div>
+
+                            <!-- Screener Metrics Table -->
+                            <div>
+                                <h4 style="color: var(--primary-blue); margin-bottom: 12px; font-size: 0.95rem; font-weight: 600;">Screener.in Metrics Summary</h4>
+                                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 0.85rem; background: rgba(255,255,255,0.02); border-radius: 12px; padding: 16px; border: 1px solid var(--border-color);">
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;"><span style="color: var(--text-secondary);">P/E Ratio</span> <strong id="resPE">-</strong></div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;"><span style="color: var(--text-secondary);">Return on Equity (ROE)</span> <strong id="resROE">-</strong></div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;"><span style="color: var(--text-secondary);">Debt/Equity</span> <strong id="resDE">-</strong></div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;"><span style="color: var(--text-secondary);">Op. Cash Flow</span> <strong id="resOCF">-</strong></div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;"><span style="color: var(--text-secondary);">Revenue Growth (YoY)</span> <strong id="resRevG">-</strong></div>
+                                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px;"><span style="color: var(--text-secondary);">Profit Growth (YoY)</span> <strong id="resProfG">-</strong></div>
+                                    <div style="grid-column: span 2; display: flex; justify-content: space-between; padding-top: 4px;"><span style="color: var(--text-secondary);">Shareholding (Promoter / Institution / Public)</span> <strong id="resHold">-</strong></div>
+                                </div>
+                            </div>
+
+                            <!-- Prompt Input -->
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <h4 style="color: #a78bfa; font-size: 0.95rem; font-weight: 600;">Analysis Prompt</h4>
+                                <textarea id="researchPromptText" style="width: 100%; height: 150px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px; color: white; font-family: inherit; font-size: 0.85rem; line-height: 1.45; outline: none; resize: vertical;"></textarea>
+                                <button id="runAnalysisBtn" onclick="runClaudeAnalysis()" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6); border: none; color: white; width: 100%; padding: 14px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; margin-top: 5px; box-shadow: 0 4px 14px rgba(139, 92, 246, 0.2); transition: opacity 0.2s; font-family: inherit;">
+                                    Generate Cynical Investment Thesis
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Output -->
+                        <div id="analysisOutputArea" style="display: none; border-top: 1px solid var(--border-color); padding-top: 20px; flex-direction: column; gap: 12px; width: 100%;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <h4 id="researchVerdictTitle" style="color: var(--accent-green); font-size: 1rem; font-weight: 600;">AI Analyst Verdict</h4>
+                                <button onclick="copyAnalysis()" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 6px; padding: 5px 12px; color: var(--text-secondary); font-size: 0.75rem; cursor: pointer; transition: background 0.2s; font-family: inherit;">Copy to Clipboard</button>
+                            </div>
+                            <div id="analysisContent" style="font-size: 0.9rem; color: #e5e7eb; line-height: 1.65; white-space: pre-wrap; padding: 20px; background: rgba(0,0,0,0.4); border-radius: 14px; border: 1px solid var(--border-color); max-height: 500px; overflow-y: auto;">
+                                Analyzing...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 4: INTEGRATIONS & DATA -->
+                <div id="viewIntegrations" class="dashboard-view" style="display: none;">
+                    <div class="welcome-hero" style="padding: 30px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(16, 185, 129, 0.01) 100%);">
+                        <h2 class="welcome-title" style="font-size: 1.4rem;">Broker Integrations & Data Exports</h2>
+                        <p class="welcome-subtitle" style="font-size: 0.85rem;">
+                            Nexora consolidates symbols, indices, and asset lists generated across institutional pipelines.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" style="padding: 24px;">
+                        <h3 class="feature-title" style="color: var(--primary-blue); font-size: 1rem; margin-bottom: 6px;">Broker Connectivity Mapping</h3>
+                        <p class="feature-desc" style="margin-bottom: 12px;">Symbols and availability mappings are pre-cached across leading platforms:</p>
+                        <table class="integrations-table">
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>NSE/BSE Support</th>
+                                    <th>US Stock Support</th>
+                                    <th>MCX Commodities</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><b>Groww</b></td>
+                                    <td>Yes (Delayed)</td>
+                                    <td>Yes (Real-time)</td>
+                                    <td>Yes (List only)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Dhan</b></td>
+                                    <td>Yes (Delayed)</td>
+                                    <td>Yes (Real-time)</td>
+                                    <td>Yes (List only)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Zerodha</b></td>
+                                    <td>Yes (Requires Key)</td>
+                                    <td>N/A</td>
+                                    <td>Yes (Requires Key)</td>
+                                </tr>
+                                <tr>
+                                    <td><b>INDmoney</b></td>
+                                    <td>N/A</td>
+                                    <td>Yes (Real-time)</td>
+                                    <td>N/A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="feature-card" style="padding: 24px;">
+                        <h3 class="feature-title" style="color: var(--accent-green); font-size: 1rem; margin-bottom: 6px;">Pre-compiled CSV Datasets</h3>
+                        <p class="feature-desc" style="margin-bottom: 12px;">This project writes and maintains structured spreadsheets for bulk execution:</p>
+                        <table class="integrations-table">
+                            <thead>
+                                <tr>
+                                    <th>Dataset Filename</th>
+                                    <th>Content Description</th>
+                                    <th>Records</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>all_stocks_data.csv</code></td>
+                                    <td>Unified 30-day historical prices for all markets</td>
+                                    <td>18,778 tickers</td>
+                                </tr>
+                                <tr>
+                                    <td><code>nse_stocks_data.csv</code></td>
+                                    <td>National Stock Exchange of India equities</td>
+                                    <td>2,387 tickers</td>
+                                </tr>
+                                <tr>
+                                    <td><code>us_stocks_data.csv</code></td>
+                                    <td>US NASDAQ/NYSE equities</td>
+                                    <td>13,018 tickers</td>
+                                </tr>
+                                <tr>
+                                    <td><code>platform_instruments.csv</code></td>
+                                    <td>Consolidated Zerodha, Dhan, and Groww metadata</td>
+                                    <td>18,808 mapping entries</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- VIEW 5: PROFILE & CONFIGURATION -->
+                <div id="viewProfile" class="dashboard-view" style="display: none;">
+                    <div class="welcome-hero" style="padding: 30px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.02) 0%, rgba(139, 92, 246, 0.01) 100%);">
+                        <h2 class="welcome-title" style="font-size: 1.4rem;">Profile & settings</h2>
+                        <p class="welcome-subtitle" style="font-size: 0.85rem;">
+                            Configure Clerk authentication and multi-provider LLM API key credentials for deep research.
+                        </p>
+                    </div>
+
+                    <div class="profile-card">
+                        <div class="profile-title">System & API Key Credentials</div>
+                        
+                        <div class="profile-grid">
+                            <!-- Clerk Key -->
+                            <div class="profile-group full-width">
+                                <label class="profile-label" for="profileClerkKeyInput">Clerk Publishable Key</label>
+                                <input type="text" id="profileClerkKeyInput" class="profile-input" placeholder="pk_test_..." />
+                                <span style="font-size: 0.7rem; color: var(--text-secondary);">Used to authenticate access and display the user session buttons.</span>
+                            </div>
+
+                            <!-- LLM Provider Select -->
+                            <div class="profile-group">
+                                <label class="profile-label" for="providerSelect">Deep Research LLM Provider</label>
+                                <select id="providerSelect" class="profile-input profile-select" onchange="onProviderChange()">
+                                    <option value="claude">Anthropic Claude</option>
+                                    <option value="openai">OpenAI ChatGPT</option>
+                                    <option value="gemini">Google Gemini</option>
+                                    <option value="openrouter">OpenRouter (Any LLM)</option>
+                                </select>
+                            </div>
+
+                            <!-- Model Name -->
+                            <div class="profile-group">
+                                <label class="profile-label" for="modelInput">Model ID</label>
+                                <input type="text" id="modelInput" class="profile-input" placeholder="e.g. claude-3-5-sonnet-20241022" />
+                            </div>
+
+                            <!-- Anthropic Key -->
+                            <div class="profile-group">
+                                <label class="profile-label" for="anthropicKeyInput">Anthropic Claude Key</label>
+                                <input type="password" id="anthropicKeyInput" class="profile-input" placeholder="Enter key (leave empty to keep saved)" />
+                            </div>
+
+                            <!-- OpenAI Key -->
+                            <div class="profile-group">
+                                <label class="profile-label" for="openaiKeyInput">OpenAI API Key</label>
+                                <input type="password" id="openaiKeyInput" class="profile-input" placeholder="Enter key (leave empty to keep saved)" />
+                            </div>
+
+                            <!-- Gemini Key -->
+                            <div class="profile-group">
+                                <label class="profile-label" for="geminiKeyInput">Google Gemini Key</label>
+                                <input type="password" id="geminiKeyInput" class="profile-input" placeholder="Enter key (leave empty to keep saved)" />
+                            </div>
+
+                            <!-- OpenRouter Key -->
+                            <div class="profile-group">
+                                <label class="profile-label" for="openrouterKeyInput">OpenRouter API Key</label>
+                                <input type="password" id="openrouterKeyInput" class="profile-input" placeholder="Enter key (leave empty to keep saved)" />
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <button id="saveSettingsBtn" class="profile-save-btn" onclick="saveSettings()">Save Configuration</button>
+                            <div id="profileStatusMsg" class="profile-status"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+    <!-- Chatbot Widget -->
+    <div id="chatWidget" style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; font-family: 'Inter', sans-serif;">
+        <!-- Chat Toggle Button -->
+        <button id="chatToggle" style="width: 52px; height: 52px; border-radius: 50%; background: var(--primary-blue); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25); color: white; transition: all 0.25s ease; outline: none;">
+            <svg id="chatIcon" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="transition: transform 0.3s;">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chatWindow" style="position: absolute; bottom: 70px; right: 0; width: 380px; height: 500px; background: var(--card-bg-solid); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: 0 12px 40px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; transition: all 0.25s ease; transform: scale(0.95) translateY(12px); opacity: 0; transform-origin: bottom right;">
+            <!-- Header -->
+            <div style="border-bottom: 1px solid var(--border-color); padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 10px; height: 10px; background: var(--accent-green); border-radius: 50%; box-shadow: 0 0 10px var(--accent-green);"></div>
+                    <span style="font-weight: 600; font-size: 0.95rem; letter-spacing: -0.01em;">Nexora Assistant</span>
+                </div>
+                <button id="closeChat" style="background: transparent; border: none; color: var(--text-secondary); cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; outline: none;">&times;</button>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chatMessages" style="flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth;">
+                <!-- Initial Assistant Message -->
+                <div class="chat-msg-bot">
+                    Hi! I am your project assistant. How can I help you today? You can ask me about files, platforms, usage, or check any stock's price!
+                </div>
+            </div>
+
+            <!-- Suggestions chips -->
+            <div style="padding: 0 20px 10px; display: flex; gap: 8px; overflow-x: auto; white-space: nowrap; -ms-overflow-style: none; scrollbar-width: none;">
+                <button class="chat-pill" onclick="askChat('List the output files')">Output Files</button>
+                <button class="chat-pill" onclick="askChat('How to refresh prices?')">How to Run</button>
+                <button class="chat-pill" onclick="askChat('Price of TCS')">Check TCS</button>
+            </div>
+
+            <!-- Input area -->
+            <div style="border-top: 1px solid var(--border-color); padding: 12px 16px; display: flex; gap: 10px; align-items: center; background: rgba(0,0,0,0.15);">
+                <input type="text" id="chatInput" placeholder="Ask a question..." style="flex: 1; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; color: var(--text-primary); font-size: 0.85rem; outline: none; transition: border 0.2s;" onkeydown="if(event.key==='Enter') sendChatMessage()">
+                <button id="sendChatBtn" onclick="sendChatMessage()" style="background: var(--primary-blue); border: none; color: white; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; outline: none;">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="transform: rotate(45deg);">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    </div> <!-- Close appContent -->
+
+    <!-- Login Container -->
+    <div id="loginContent" style="display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; font-family: 'Inter', sans-serif; background: var(--bg-color);">
+        <div style="background: var(--card-bg-solid); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 44px; text-align: center; max-width: 420px; width: 100%;">
+            <div style="color: var(--text-primary); font-weight: 700; font-size: 1.6rem; letter-spacing: -0.03em; margin-bottom: 4px;">NEXORA</div>
+            <p style="color: var(--text-secondary); font-size: 0.85rem; line-height: 1.5; margin-bottom: 30px;">The Next Era of Investing. Sign in to access AI-powered research.</p>
+            <div id="signInDiv" style="display: flex; justify-content: center;"></div>
+        </div>
+    </div>
+
+    <!-- Configuration Screen (If Publishable Key is Missing) -->
+    <div id="configContent" style="display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; font-family: 'Inter', sans-serif;">
+        <div style="background: rgba(22, 28, 36, 0.7); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; box-shadow: 0 12px 40px rgba(0,0,0,0.3); backdrop-filter: blur(20px);">
+            <div style="color: var(--accent-red); font-weight: 700; font-size: 1.6rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                Clerk Setup Required
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 24px;">To enable secure user logins, please provide your **Clerk Publishable Key**. You can find this in your Clerk Dashboard under "API Keys".</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; text-align: left;">
+                <label style="color: var(--text-primary); font-size: 0.85rem; font-weight: 500;">Publishable Key</label>
+                <input type="text" id="clerkKeyInput" placeholder="pk_test_..." style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; color: var(--text-primary); font-size: 0.85rem; outline: none; width: 100%;">
+            </div>
+            <button onclick="saveClerkKey()" style="background: var(--primary-blue); border: none; color: white; border-radius: 12px; width: 100%; padding: 14px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: background 0.2s;">Save and Refresh</button>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 15px; text-align: center;">Alternatively, paste it into the <code>CLERK_PUBLISHABLE_KEY</code> field inside your <code>.env</code> file.</p>
+        </div>
+    </div>
+
+    <script>
+        // -- ClerkJS Integration ----------------------------------------------
+        function waitForClerk() {
+            return new Promise((resolve, reject) => {
+                let attempts = 0;
+                const interval = setInterval(() => {
+                    if (typeof Clerk !== 'undefined' && typeof Clerk.load === 'function') {
+                        clearInterval(interval);
+                        resolve();
+                    } else {
+                        attempts++;
+                        if (attempts > 200) { // 10 seconds max wait
+                            clearInterval(interval);
+                            reject(new Error("ClerkJS SDK failed to load. Please check your network connection."));
+                        }
+                    }
+                }, 50);
+            });
+        }
+
+        // Fetch Clerk Key on load and initialize
+        window.addEventListener('load', async () => {
+            const key = "{{CLERK_PUBLISHABLE_KEY}}";
+            if (!key || key.startsWith('{{')) {
+                // Show setup screen if key is missing or placeholder remains
+                document.getElementById('configContent').style.display = 'flex';
+                return;
+            }
+
+            try {
+                // Wait for ClerkJS Browser SDK to be loaded and ready (from parallel script download)
+                await waitForClerk();
+
+                // Initialize Clerk singleton
+                await Clerk.load({
+                    publishableKey: key
+                });
+
+                if (Clerk.user) {
+                    // User is logged in: show application, hide login and setup
+                    document.getElementById('appContent').style.display = 'flex';
+                    document.getElementById('loginContent').style.display = 'none';
+                    document.getElementById('configContent').style.display = 'none';
+
+                    // Mount the user button profile widget
+                    Clerk.mountUserButton(document.getElementById('userButton'));
+                    loadSettings();
+                } else {
+                    // User is not logged in: show login screen
+                    document.getElementById('appContent').style.display = 'none';
+                    document.getElementById('loginContent').style.display = 'flex';
+                    document.getElementById('configContent').style.display = 'none';
+
+                    Clerk.mountSignIn(document.getElementById('signInDiv'), {
+                        appearance: {
+                            theme: 'dark'
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error("Clerk Init Error:", err);
+                // Fallback to showing config screen if something breaks (like invalid key)
+                document.getElementById('configContent').style.display = 'flex';
+            }
+        });
+
+        async function saveClerkKey() {
+            const val = document.getElementById('clerkKeyInput').value.trim();
+            if (!val) {
+                alert("Please enter a valid Publishable Key.");
+                return;
+            }
+            try {
+                const res = await fetch(`/api/save-clerk-key?key=${encodeURIComponent(val)}`);
+                const data = await res.json();
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert("Error saving key: " + (data.error || "Unknown error"));
+                }
+            } catch (err) {
+                alert("Error connecting to server: " + err.message);
+            }
+        }
+
+        // -- Dashboard Logic --------------------------------------------------
+        const searchBar = document.getElementById('searchBar');
+        const dropdown = document.getElementById('dropdown');
+        const infoCard = document.getElementById('infoCard');
+        const stockCard = document.getElementById('stockCard');
+        
+        let searchTimeout = null;
+        let activeSymbol = null;
+        let activeExchange = null;
+        let updateInterval = null;
+        let lastPrice = null;
+
+        // Autocomplete search
+        searchBar.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            clearTimeout(searchTimeout);
+
+            if (!query) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                    .then(r => r.json())
+                    .then(items => {
+                        dropdown.innerHTML = '';
+                        if (items.length === 0) {
+                            dropdown.style.display = 'none';
+                            return;
+                        }
+
+                        items.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'autocomplete-item';
+                            div.innerHTML = `
+                                <div class="item-left">
+                                    <span class="item-symbol">${item.Symbol}</span>
+                                    <span class="item-exchange">${item.Exchange}</span>
+                                </div>
+                                <div class="item-right">
+                                    <span class="item-type">${item.Type}</span>
+                                </div>
+                            `;
+                            div.addEventListener('click', () => {
+                                selectStock(item.Symbol, item.Exchange, item.Type);
+                                dropdown.style.display = 'none';
+                                searchBar.value = '';
+                            });
+                            dropdown.appendChild(div);
+                        });
+                        dropdown.style.display = 'block';
+                    });
+            }, 150);
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchBar.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        function selectStock(symbol, exchange = '', type = '') {
+            activeSymbol = symbol;
+            activeExchange = exchange;
+            
+            // Set metadata if passed (otherwise it'll resolve from fetch)
+            document.getElementById('cardSymbol').innerText = symbol;
+            document.getElementById('cardExch').innerText = exchange || (symbol.endsWith('.NS') ? 'NSE' : (symbol.endsWith('.BO') ? 'BSE' : 'US'));
+            document.getElementById('cardType').innerText = type || 'Equity';
+
+            // Show card, hide info
+            infoCard.style.display = 'none';
+            stockCard.style.display = 'flex';
+            
+            // Reset price styling
+            lastPrice = null;
+            document.getElementById('cardPrice').innerText = "Loading...";
+            document.getElementById('cardPrice').className = 'price-val';
+            document.getElementById('cardChangeBadge').className = 'price-change-badge';
+            document.getElementById('cardChange').innerText = "-";
+            document.getElementById('statOpen').innerText = "-";
+            document.getElementById('statHigh').innerText = "-";
+            document.getElementById('statLow').innerText = "-";
+            document.getElementById('statVol').innerText = "-";
+
+            // Reset fundamentals/QA and show loading states
+            document.getElementById('fundamentalsLoading').style.display = 'block';
+            document.getElementById('fundamentalsGrid').style.display = 'none';
+            document.getElementById('qaLoading').style.display = 'block';
+            document.getElementById('qaContainer').style.display = 'none';
+
+            // Hide old research card on switching stocks to avoid mismatching data
+            document.getElementById('researchCard').style.display = 'none';
+
+            // Fetch immediately
+            fetchCMP();
+            fetchInfo();
+
+            // Set up polling
+            clearInterval(updateInterval);
+            updateInterval = setInterval(fetchCMP, 5000);
+        }
+
+        function fetchCMP() {
+            if (!activeSymbol) return;
+
+            const url = `/api/cmp?symbol=${encodeURIComponent(activeSymbol)}&exchange=${encodeURIComponent(activeExchange || '')}`;
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    const priceEl = document.getElementById('cardPrice');
+                    const changeBadge = document.getElementById('cardChangeBadge');
+
+                    if (data.error) {
+                        priceEl.innerText = "N/A";
+                        priceEl.className = 'price-val price-down';
+                        document.getElementById('cardChange').innerText = data.error;
+                        changeBadge.className = 'price-change-badge bg-down';
+                        return;
+                    }
+
+                    const price = data.Price;
+                    const change = data.Change_Percent;
+                    let exchange = data.Exchange || activeExchange;
+                    if (!exchange && activeSymbol) {
+                        if (activeSymbol.endsWith('.NS')) exchange = 'NSE';
+                        else if (activeSymbol.endsWith('.BO')) exchange = 'BSE';
+                    }
+                    const currency = (exchange === 'NSE' || exchange === 'BSE') ? '₹' : '$';
+                    
+                    priceEl.innerText = `${currency} ${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('cardChange').innerText = `${change > 0 ? '+' : ''}${change.toFixed(2)}%`;
+                    
+                    // Stats
+                    document.getElementById('statOpen').innerText = `${currency} ${data.Open.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('statHigh').innerText = `${currency} ${data.High.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('statLow').innerText = `${currency} ${data.Low.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('statVol').innerText = data.Volume.toLocaleString();
+                    document.getElementById('lastUpdated').innerText = `Last update: ${new Date().toLocaleTimeString()}`;
+
+                    // Update exchange badge in case it fetched different metadata
+                    if (data.Exchange) {
+                        document.getElementById('cardExch').innerText = data.Exchange;
+                    }
+
+                    // Green / Red classes
+                    if (change > 0) {
+                        priceEl.className = 'price-val price-up';
+                        changeBadge.className = 'price-change-badge bg-up';
+                    } else if (change < 0) {
+                        priceEl.className = 'price-val price-down';
+                        changeBadge.className = 'price-change-badge bg-down';
+                    } else {
+                        priceEl.className = 'price-val';
+                        changeBadge.className = 'price-change-badge';
+                    }
+
+                    // Flash feedback on price change
+                    if (lastPrice !== null && lastPrice !== price) {
+                        const flashClass = price > lastPrice ? 'pulse-green' : 'pulse-red';
+                        stockCard.classList.add(flashClass);
+                        setTimeout(() => stockCard.classList.remove(flashClass), 500);
+                    }
+                    lastPrice = price;
+                })
+                .catch(err => {
+                    console.error("Error loading price:", err);
+                    document.getElementById('cardPrice').innerText = "Error";
+                    document.getElementById('cardChange').innerText = "Connection lost";
+                });
+        }
+
+        function fetchInfo() {
+            if (!activeSymbol) return;
+
+            const url = `/api/info?symbol=${encodeURIComponent(activeSymbol)}&exchange=${encodeURIComponent(activeExchange || '')}`;
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('fundamentalsLoading').innerText = "Error: " + data.error;
+                        document.getElementById('qaLoading').innerText = "Error: " + data.error;
+                        return;
+                    }
+
+                    // Populate Fundamentals
+                    const f = data.Fundamentals;
+                    document.getElementById('fundMarketCap').innerText = f.marketCap;
+                    document.getElementById('fundPE').innerText = f.peRatio;
+                    document.getElementById('fundEPS').innerText = f.eps;
+                    document.getElementById('fundPB').innerText = f.priceToBook;
+                    document.getElementById('fundDiv').innerText = f.divYield;
+                    document.getElementById('fundBeta').innerText = f.beta;
+                    document.getElementById('fundHigh52').innerText = f.high52;
+                    document.getElementById('fundLow52').innerText = f.low52;
+                    document.getElementById('fundRevenue').innerText = f.revenue;
+                    document.getElementById('fundMargin').innerText = f.profitMargin;
+
+                    document.getElementById('fundamentalsLoading').style.display = 'none';
+                    document.getElementById('fundamentalsGrid').style.display = 'grid';
+
+                    // Populate QA
+                    const qaContainer = document.getElementById('qaContainer');
+                    qaContainer.innerHTML = '';
+                    data.QA.forEach(item => {
+                        const qaItem = document.createElement('div');
+                        qaItem.className = 'qa-item';
+                        qaItem.innerHTML = `
+                            <span class="qa-q">${item.question}</span>
+                            <span class="qa-a">${item.answer}</span>
+                        `;
+                        qaContainer.appendChild(qaItem);
+                    });
+
+                    document.getElementById('qaLoading').style.display = 'none';
+                    qaContainer.style.display = 'flex';
+                })
+                .catch(err => {
+                    console.error("Error loading info:", err);
+                    document.getElementById('fundamentalsLoading').innerText = "Failed to load fundamental data.";
+                    document.getElementById('qaLoading').innerText = "Failed to load company profile.";
+                });
+        }
+
+        // Chatbot Panel Toggle
+        const chatToggle = document.getElementById('chatToggle');
+        const chatWindow = document.getElementById('chatWindow');
+        const closeChat = document.getElementById('closeChat');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        let chatOpen = false;
+
+        chatToggle.addEventListener('click', () => {
+            chatOpen = !chatOpen;
+            if (chatOpen) {
+                chatWindow.style.display = 'flex';
+                // Trigger reflow for animations
+                setTimeout(() => {
+                    chatWindow.style.transform = 'scale(1) translateY(0)';
+                    chatWindow.style.opacity = '1';
+                }, 10);
+                chatToggle.style.transform = 'rotate(135deg)';
+                chatToggle.style.background = '#ef4444'; // Red exit color
+            } else {
+                chatWindow.style.transform = 'scale(0.9) translateY(20px)';
+                chatWindow.style.opacity = '0';
+                setTimeout(() => {
+                    chatWindow.style.display = 'none';
+                }, 300);
+                chatToggle.style.transform = 'rotate(0deg)';
+                chatToggle.style.background = 'linear-gradient(135deg, #3b82f6, #10b981)';
+            }
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatToggle.click();
+        });
+
+        function askChat(text) {
+            chatInput.value = text;
+            sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Clear input
+            chatInput.value = '';
+
+            // Render user message
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'chat-msg-user';
+            userMsgDiv.innerText = text;
+            chatMessages.appendChild(userMsgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Render loading bot message
+            const botLoadingDiv = document.createElement('div');
+            botLoadingDiv.className = 'chat-msg-bot';
+            botLoadingDiv.innerHTML = '<i>Typing...</i>';
+            chatMessages.appendChild(botLoadingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Send query
+            fetch(`/api/chat?msg=${encodeURIComponent(text)}`)
+                .then(r => r.json())
+                .then(data => {
+                    botLoadingDiv.innerHTML = data.response;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(err => {
+                    console.error("Chat error:", err);
+                    botLoadingDiv.innerHTML = "Sorry, I lost connection to the server. Please try again.";
+                });
+        }
+
+        // -- AI Deep Research Engine -------------------------------------------
+        let lastResearchPayload = null;
+        const DEFAULT_RESEARCH_PROMPT = `Act as a seasoned equity research analyst with 20 years of experience across fundamental analysis, technical analysis, and behavioral finance. I am providing you with the following documents for [Company Name]: annual financial statements, Management Discussion & Analysis, concall transcripts, a daily technical chart, key ratios from Screener, and the latest shareholding pattern. Tear this company apart across these dimensions: FUNDAMENTALS - Is this business genuinely healthy or just looks good on surface? Dig into revenue quality, margin trajectory, cash flow vs reported profits, debt structure, and ROE sustainability. Flag any accounting red flags. MANAGEMENT DNA - Read between the lines of the concall transcripts and MDA. Is management confident or defensive? Are they overpromising and underdelivering? Any change in language tone vs last year? Promoter pledge or stake reduction is an automatic red flag - call it out. VALUATION REALITY - Is the market pricing in perfection? Compare current P/E, EV/EBITDA against historical averages and sector peers. Tell me if I am paying a premium for growth that may never come. TECHNICAL STRUCTURE - Where is the stock in its trend cycle? Is it in accumulation, markup, distribution, or markdown phase? Key support and resistance levels. Is volume confirming price action or diverging? RISK FACTORS - What are the 3 things that could destroy this thesis? Sector risk, company-specific risk, macro risk. FINAL VERDICT- Buy, Hold, or Avoid. Conviction score out of 10. Price at which this becomes interesting if not now. One line that summarizes this stock. Do not give me a balanced, diplomatic answer. I want the truth - even if it is uncomfortable.`;
+
+        function closeResearch() {
+            document.getElementById('researchCard').style.display = 'none';
+            document.getElementById('noResearchRunning').style.display = 'flex';
+        }
+
+        async function triggerResearch() {
+            if (!activeSymbol) return;
+
+            const researchCard = document.getElementById('researchCard');
+            researchCard.style.display = 'flex';
+            document.getElementById('noResearchRunning').style.display = 'none';
+
+            // Reset UI states
+            document.getElementById('researchProgress').style.display = 'flex';
+            document.getElementById('researchProgressBar').style.width = '0%';
+            document.getElementById('researchProgressPct').innerText = '0%';
+            document.getElementById('researchProgressText').innerText = 'Starting parallel collection threads...';
+            document.getElementById('researchDataArea').style.display = 'none';
+            document.getElementById('analysisOutputArea').style.display = 'none';
+            
+            // Set all steps to neutral
+            for (let i = 1; i <= 6; i++) {
+                const stepEl = document.getElementById('step' + i);
+                stepEl.innerHTML = `⚪ ${stepEl.innerText.slice(2)}`;
+                stepEl.style.color = 'var(--text-secondary)';
+            }
+
+            // Check Settings status (API Key presence)
+            try {
+                const res = await fetch('/api/get-settings');
+                const settings = await res.json();
+                if (!settings.hasAnthropicKey) {
+                    document.getElementById('researchKeyWarning').style.display = 'flex';
+                } else {
+                    document.getElementById('researchKeyWarning').style.display = 'none';
+                }
+            } catch (e) {
+                console.error("Settings load error:", e);
+            }
+
+            // Animate progress bar as it executes
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                if (progress < 90) {
+                    progress += Math.floor(Math.random() * 8) + 2;
+                    if (progress > 90) progress = 90;
+                    document.getElementById('researchProgressBar').style.width = progress + '%';
+                    document.getElementById('researchProgressPct').innerText = progress + '%';
+                    
+                    // Light up steps based on progress value for visual excellence
+                    if (progress > 15) markStepComplete(1, '🟢');
+                    if (progress > 30) markStepComplete(2, '🟢');
+                    if (progress > 45) markStepComplete(3, '🟢');
+                    if (progress > 60) markStepComplete(4, '🟢');
+                    if (progress > 75) markStepComplete(5, '🟢');
+                    if (progress > 85) markStepComplete(6, '🟢');
+                }
+            }, 250);
+
+            const url = `/api/research?symbol=${encodeURIComponent(activeSymbol)}&exchange=${encodeURIComponent(activeExchange || '')}`;
+            try {
+                const r = await fetch(url);
+                const data = await r.json();
+                
+                clearInterval(progressInterval);
+                document.getElementById('researchProgressBar').style.width = '100%';
+                document.getElementById('researchProgressPct').innerText = '100%';
+                document.getElementById('researchProgressText').innerText = 'Collection complete!';
+                
+                // Mark all steps complete
+                for (let i = 1; i <= 6; i++) {
+                    markStepComplete(i, '🟢');
+                }
+
+                if (data.error) {
+                    alert("Research data collection failed: " + data.error);
+                    return;
+                }
+
+                // Render metrics summaries
+                lastResearchPayload = data;
+                const m = data.screener_metrics;
+                
+                document.getElementById('resPE').innerText = m.pe_ratio;
+                document.getElementById('resROE').innerText = m.roe;
+                document.getElementById('resDE').innerText = m.debt_to_equity;
+                document.getElementById('resOCF').innerText = m.operating_cashflow;
+                document.getElementById('resRevG').innerText = m.revenue_growth_yoy;
+                document.getElementById('resProfG').innerText = m.profit_growth_yoy;
+                
+                const s = data.shareholding;
+                document.getElementById('resHold').innerText = `${s.promoter_pct || 'N/A'} (Promoter) / ${s.fii_dii_pct || 'N/A'} (Inst) / ${s.public_pct || 'N/A'} (Pub)`;
+
+                // Technical Chart Image
+                const chartImg = document.getElementById('researchChartImg');
+                if (data.chart_base64) {
+                    chartImg.src = data.chart_base64;
+                    chartImg.style.display = 'block';
+                } else {
+                    chartImg.style.display = 'none';
+                }
+
+                // Populate Default Prompt template customized with Company Name
+                const companyName = data.company_name || activeSymbol;
+                const customizedPrompt = DEFAULT_RESEARCH_PROMPT.replace('[Company Name]', companyName);
+                document.getElementById('researchPromptText').value = customizedPrompt;
+
+                // Show data section
+                setTimeout(() => {
+                    document.getElementById('researchProgress').style.display = 'none';
+                    document.getElementById('researchDataArea').style.display = 'flex';
+                }, 800);
+
+            } catch (err) {
+                clearInterval(progressInterval);
+                console.error("Research fetch error:", err);
+                alert("An error occurred during data collection.");
+            }
+        }
+
+        function markStepComplete(stepNum, emoji) {
+            const el = document.getElementById('step' + stepNum);
+            if (el && el.innerText.startsWith('⚪')) {
+                el.innerHTML = `${emoji} ${el.innerText.slice(2)}`;
+                el.style.color = 'var(--text-primary)';
+            }
+        }
+
+        async function saveAnthropicKey() {
+            const key = document.getElementById('anthropicKeyInput').value.trim();
+            if (!key) {
+                alert("Please enter a valid key.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/save-anthropic-key?key=${encodeURIComponent(key)}`);
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('researchKeyWarning').style.display = 'none';
+                    alert("Anthropic API Key saved successfully.");
+                } else {
+                    alert("Failed to save key: " + data.error);
+                }
+            } catch (e) {
+                console.error("Save error:", e);
+                alert("Connection failed.");
+            }
+        }
+
+        // Global LLM configuration state
+        let currentSettings = {
+            provider: 'claude',
+            model: 'claude-3-5-sonnet-20241022'
+        };
+
+        // Populate model ID input dynamically based on provider choice
+        function onProviderChange() {
+            const provider = document.getElementById('providerSelect').value;
+            const modelInput = document.getElementById('modelInput');
+            if (provider === 'claude') {
+                modelInput.value = 'claude-3-5-sonnet-20241022';
+            } else if (provider === 'openai') {
+                modelInput.value = 'gpt-4o';
+            } else if (provider === 'gemini') {
+                modelInput.value = 'gemini-2.5-pro';
+            } else if (provider === 'openrouter') {
+                modelInput.value = 'deepseek/deepseek-chat';
+            }
+        }
+
+        function formatAnalystReport(text) {
+            if (!text) return "";
+            let cleaned = text.trim();
+            let safe = cleaned
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+
+            let lines = safe.split('\n');
+            let formatted = lines.map(line => {
+                let trimmed = line.trim();
+                if (!trimmed) return '<br>';
+
+                if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
+                    return '<hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 16px 0;">';
+                }
+
+                if (trimmed.startsWith('#')) {
+                    let headerText = trimmed.replace(/^#+\s*/, '').replace(/[\*\#]/g, '').trim();
+                    return `<h3 style="color: var(--accent-blue); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; border-bottom: 1px solid rgba(59,130,246,0.2); padding-bottom: 4px;">${headerText}</h3>`;
+                }
+
+                if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                    let bulletText = trimmed.replace(/^[\-\*]\s*/, '').trim();
+                    bulletText = bulletText.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #ffffff; font-weight: 600;">$1</strong>').replace(/[\*\#]/g, '');
+                    return `<div style="margin-bottom: 8px; padding-left: 14px; border-left: 3px solid var(--accent-blue); color: var(--text-secondary); line-height: 1.6;">${bulletText}</div>`;
+                }
+
+                let numMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+                if (numMatch) {
+                    let num = numMatch[1];
+                    let itemText = numMatch[2].replace(/\*\*(.*?)\*\*/g, '<strong style="color: #ffffff; font-weight: 600;">$1</strong>').replace(/[\*\#]/g, '');
+                    return `<div style="margin-bottom: 8px; padding-left: 14px; border-left: 3px solid var(--accent-green); color: var(--text-secondary); line-height: 1.6;"><strong style="color: #ffffff;">${num}.</strong> ${itemText}</div>`;
+                }
+
+                let paraText = trimmed.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #ffffff; font-weight: 600;">$1</strong>').replace(/[\*\#]/g, '');
+                return `<p style="margin-bottom: 8px; color: var(--text-primary); line-height: 1.6;">${paraText}</p>`;
+            });
+
+            return formatted.join('');
+        }
+
+        async function loadSettings() {
+            try {
+                const res = await fetch('/api/get-settings');
+                const data = await res.json();
+                
+                if (data.publishableKey) {
+                    document.getElementById('profileClerkKeyInput').value = data.publishableKey;
+                }
+                if (data.provider) {
+                    document.getElementById('providerSelect').value = data.provider;
+                    currentSettings.provider = data.provider;
+                }
+                if (data.model) {
+                    document.getElementById('modelInput').value = data.model;
+                    currentSettings.model = data.model;
+                }
+                
+                // Set placeholders or values for keys
+                if (data.hasAnthropicKey) {
+                    document.getElementById('anthropicKeyInput').placeholder = "Saved: " + data.maskedAnthropicKey;
+                } else {
+                    document.getElementById('anthropicKeyInput').placeholder = "Enter key";
+                }
+                if (data.hasOpenaiKey) {
+                    document.getElementById('openaiKeyInput').placeholder = "Saved: " + data.maskedOpenaiKey;
+                } else {
+                    document.getElementById('openaiKeyInput').placeholder = "Enter key";
+                }
+                if (data.hasGeminiKey) {
+                    document.getElementById('geminiKeyInput').placeholder = "Saved: " + data.maskedGeminiKey;
+                } else {
+                    document.getElementById('geminiKeyInput').placeholder = "Enter key";
+                }
+                if (data.hasOpenrouterKey) {
+                    document.getElementById('openrouterKeyInput').placeholder = "Saved: " + data.maskedOpenrouterKey;
+                } else {
+                    document.getElementById('openrouterKeyInput').placeholder = "Enter key";
+                }
+            } catch (e) {
+                console.error("Error loading settings:", e);
+            }
+        }
+
+        async function saveSettings() {
+            const clerkKey = document.getElementById('profileClerkKeyInput').value.trim();
+            const provider = document.getElementById('providerSelect').value;
+            const model = document.getElementById('modelInput').value.trim();
+            const anthropicKey = document.getElementById('anthropicKeyInput').value.trim();
+            const openaiKey = document.getElementById('openaiKeyInput').value.trim();
+            const geminiKey = document.getElementById('geminiKeyInput').value.trim();
+            const openrouterKey = document.getElementById('openrouterKeyInput').value.trim();
+            
+            const btn = document.getElementById('saveSettingsBtn');
+            const statusMsg = document.getElementById('profileStatusMsg');
+            
+            btn.disabled = true;
+            btn.innerText = "Saving...";
+            
+            statusMsg.className = "profile-status";
+            statusMsg.style.display = "none";
+            
+            try {
+                const res = await fetch('/api/save-settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        clerkKey: clerkKey || undefined,
+                        provider: provider,
+                        model: model || undefined,
+                        anthropicKey: anthropicKey || undefined,
+                        openaiKey: openaiKey || undefined,
+                        geminiKey: geminiKey || undefined,
+                        openrouterKey: openrouterKey || undefined
+                    })
+                });
+                
+                const data = await res.json();
+                btn.disabled = false;
+                btn.innerText = "Save Configuration";
+                
+                if (data.success) {
+                    statusMsg.innerText = "Configuration saved successfully!";
+                    statusMsg.className = "profile-status success";
+                    
+                    // Clear passwords inputs
+                    document.getElementById('anthropicKeyInput').value = '';
+                    document.getElementById('openaiKeyInput').value = '';
+                    document.getElementById('geminiKeyInput').value = '';
+                    document.getElementById('openrouterKeyInput').value = '';
+                    
+                    // Reload setting placeholders
+                    await loadSettings();
+                } else {
+                    statusMsg.innerText = "Error: " + (data.error || "Failed to save configuration");
+                    statusMsg.className = "profile-status error";
+                }
+            } catch (e) {
+                btn.disabled = false;
+                btn.innerText = "Save Configuration";
+                statusMsg.innerText = "Network error: Connection failed";
+                statusMsg.className = "profile-status error";
+                console.error("Save settings error:", e);
+            }
+        }
+
+        async function runClaudeAnalysis() {
+            const prompt = document.getElementById('researchPromptText').value.trim();
+            if (!prompt) {
+                alert("Prompt cannot be empty.");
+                return;
+            }
+
+            const outputArea = document.getElementById('analysisOutputArea');
+            const content = document.getElementById('analysisContent');
+            const runBtn = document.getElementById('runAnalysisBtn');
+            const verdictTitle = document.getElementById('researchVerdictTitle');
+
+            const providerName = currentSettings.provider === 'claude' ? 'Claude' :
+                                 currentSettings.provider === 'openai' ? 'ChatGPT' :
+                                 currentSettings.provider === 'gemini' ? 'Gemini' : 'OpenRouter';
+
+            if (verdictTitle) {
+                verdictTitle.innerText = `${providerName} Analyst Verdict`;
+            }
+
+            outputArea.style.display = 'flex';
+            content.innerHTML = `<i>Processing stock data with ${providerName} (${currentSettings.model})... Please wait.</i>`;
+            runBtn.disabled = true;
+            runBtn.style.opacity = '0.6';
+
+            try {
+                const res = await fetch('/api/research-analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        payload: lastResearchPayload,
+                        prompt: prompt,
+                        provider: currentSettings.provider,
+                        model: currentSettings.model
+                    })
+                });
+                
+                const data = await res.json();
+                runBtn.disabled = false;
+                runBtn.style.opacity = '1';
+
+                if (data.error) {
+                    content.innerHTML = `<span style="color: var(--accent-red);">⚠️ Error: ${data.error}</span>`;
+                } else {
+                    content.innerHTML = formatAnalystReport(data.analysis);
+                }
+            } catch (e) {
+                runBtn.disabled = false;
+                runBtn.style.opacity = '1';
+                console.error("Analysis error:", e);
+                content.innerHTML = `<span style="color: var(--accent-red);">⚠️ Connection failed.</span>`;
+            }
+        }
+
+        function copyAnalysis() {
+            const text = document.getElementById('analysisContent').innerText;
+            navigator.clipboard.writeText(text)
+                .then(() => alert("Analysis copied to clipboard!"))
+                .catch(() => alert("Failed to copy."));
+        }
+
+        // View Tab Switching
+        function switchView(viewName) {
+            // Hide all views
+            document.getElementById('viewWelcome').style.display = 'none';
+            document.getElementById('viewTerminal').style.display = 'none';
+            document.getElementById('viewResearch').style.display = 'none';
+            document.getElementById('viewIntegrations').style.display = 'none';
+            document.getElementById('viewProfile').style.display = 'none';
+
+            // Show selected view
+            document.getElementById(viewName).style.display = 'flex';
+
+            // Update active state on sidebar links
+            const links = document.querySelectorAll('.sidebar-link');
+            links.forEach(link => {
+                // Check if the link's onclick function switches to the current view
+                if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(viewName)) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+
+        // Research trigger from Market Terminal Stock details card
+        function triggerResearchFromTerminal() {
+            switchView('viewResearch');
+            triggerResearch();
+        }
+    </script>
+</body>
+</html>

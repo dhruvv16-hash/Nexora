@@ -1,0 +1,13 @@
+# Watchlist for real-time stock tracker
+# One ticker per line. Comments starting with # are ignored.
+
+RELIANCE.NS
+TCS.NS
+INFY.NS
+HDFCBANK.NS
+AAPL
+MSFT
+GOOGL
+AMZN
+TSLA
+BTC-USD
