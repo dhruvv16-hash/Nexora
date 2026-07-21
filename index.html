@@ -945,7 +945,7 @@
 </head>
 <body>
     <!-- App Container -->
-    <div id="appContent" style="display: none; min-height: 100vh; width: 100%;">
+    <div id="appContent" style="display: flex; min-height: 100vh; width: 100%;">
         <div class="app-layout">
             <!-- Sidebar -->
             <aside class="sidebar">
@@ -1507,47 +1507,52 @@
 
         // Fetch Clerk Key on load and initialize
         window.addEventListener('load', async () => {
-            const key = "{{CLERK_PUBLISHABLE_KEY}}";
+            let key = "{{CLERK_PUBLISHABLE_KEY}}";
             if (!key || key.startsWith('{{')) {
-                // Show setup screen if key is missing or placeholder remains
-                document.getElementById('configContent').style.display = 'flex';
+                try {
+                    const res = await fetch('/api/get-settings');
+                    const settings = await res.json();
+                    if (settings && settings.clerkKey) {
+                        key = settings.clerkKey;
+                    }
+                } catch (e) {
+                    console.log("Settings fetch info:", e);
+                }
+            }
+
+            if (!key || key.startsWith('{{')) {
+                // Default to showing full app dashboard
+                document.getElementById('appContent').style.display = 'flex';
+                document.getElementById('loginContent').style.display = 'none';
+                document.getElementById('configContent').style.display = 'none';
+                loadSettings();
                 return;
             }
 
             try {
-                // Wait for ClerkJS Browser SDK to be loaded and ready (from parallel script download)
                 await waitForClerk();
-
-                // Initialize Clerk singleton
-                await Clerk.load({
-                    publishableKey: key
-                });
+                await Clerk.load({ publishableKey: key });
 
                 if (Clerk.user) {
-                    // User is logged in: show application, hide login and setup
                     document.getElementById('appContent').style.display = 'flex';
                     document.getElementById('loginContent').style.display = 'none';
                     document.getElementById('configContent').style.display = 'none';
-
-                    // Mount the user button profile widget
                     Clerk.mountUserButton(document.getElementById('userButton'));
                     loadSettings();
                 } else {
-                    // User is not logged in: show login screen
                     document.getElementById('appContent').style.display = 'none';
                     document.getElementById('loginContent').style.display = 'flex';
                     document.getElementById('configContent').style.display = 'none';
-
                     Clerk.mountSignIn(document.getElementById('signInDiv'), {
-                        appearance: {
-                            theme: 'dark'
-                        }
+                        appearance: { theme: 'dark' }
                     });
                 }
             } catch (err) {
                 console.error("Clerk Init Error:", err);
-                // Fallback to showing config screen if something breaks (like invalid key)
-                document.getElementById('configContent').style.display = 'flex';
+                document.getElementById('appContent').style.display = 'flex';
+                document.getElementById('loginContent').style.display = 'none';
+                document.getElementById('configContent').style.display = 'none';
+                loadSettings();
             }
         });
 
