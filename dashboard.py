@@ -11,7 +11,8 @@ import base64
 import time
 
 PORT = int(os.environ.get('PORT', 8000))
-CSV_FILE = 'platform_instruments.csv'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_FILE = os.path.join(BASE_DIR, 'platform_instruments.csv')
 INFO_CACHE = {} # Key: query_symbol, Value: (expiry_timestamp, info_dict)
 
 def get_clerk_domain(publishable_key):
@@ -173,9 +174,10 @@ else:
     df_instruments = pd.DataFrame(columns=['Symbol', 'Exchange', 'Type'])
 
 print("Loading pre-calculated fundamentals database for instant lookups...")
-if os.path.exists("fundamentals_master.csv"):
+fm_path = os.path.join(BASE_DIR, 'fundamentals_master.csv')
+if os.path.exists(fm_path):
     try:
-        df_fm = pd.read_csv("fundamentals_master.csv", low_memory=False).fillna('N/A')
+        df_fm = pd.read_csv(fm_path, low_memory=False).fillna('N/A')
         for _, r in df_fm.iterrows():
             sym = str(r.get('Symbol', '')).strip()
             if sym:
@@ -253,6 +255,44 @@ IGNORE_WORDS = {
     'MIGHT', 'SHALL', 'WILL', 'PLEASE', 'THANKS', 'THANK', 'OKAY', 'YEAH', 'YES', 'NO',
     'PROJECT', 'PROJECTS', 'ASSISTANT', 'ASSISTANTS'
 }
+
+def search_instruments(query):
+    query = str(query).strip().upper()
+    if not query:
+        return []
+    prefix_match = df_instruments[df_instruments['Symbol'].str.upper().str.startswith(query)]
+    contain_match = df_instruments[
+        df_instruments['Symbol'].str.upper().str.contains(query) & 
+        ~df_instruments['Symbol'].str.upper().str.startswith(query)
+    ]
+    merged = pd.concat([prefix_match, contain_match], ignore_index=True)
+    results = merged.head(15).to_dict(orient='records')
+    formatted = []
+    for r in results:
+        formatted.append({
+            'Symbol': r.get('Symbol', ''),
+            'Exchange': r.get('Exchange', ''),
+            'Type': r.get('Type', '')
+        })
+    return formatted
+
+def fetch_cmp_live(symbol, exchange='NSE'):
+    data = fetch_offline_stock_data(symbol, exchange)
+    return {
+        'symbol': symbol,
+        'exchange': exchange,
+        'cmp': data.get('cmp', 0.0),
+        'change_pct': data.get('change_pct', 0.0),
+        'change_abs': data.get('change_abs', 0.0),
+        'high_52w': data.get('high_52w', 0.0),
+        'rsi_14': data.get('rsi_14', 50.0)
+    }
+
+def get_stock_info(symbol, exchange='NSE'):
+    return fetch_offline_stock_data(symbol, exchange)
+
+def call_llm_analysis(payload_data, user_prompt='', user_key='', user_provider='', user_model=''):
+    return handle_chat_query(user_prompt or 'Analyze stock fundamentals', df_instruments)
 
 def extract_stock_symbol(msg, df_instruments):
     """Extract a stock symbol from a chat message. Strategies in order:
