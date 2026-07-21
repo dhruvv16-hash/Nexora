@@ -1079,5 +1079,81 @@ def main():
         server.server_close()
 
 
+def app(environ, start_response):
+    path = environ.get('PATH_INFO', '/')
+    query = environ.get('QUERY_STRING', '')
+    method = environ.get('REQUEST_METHOD', 'GET')
+    
+    if path == '/' or path == '/index.html':
+        if os.path.exists('index.html'):
+            with open('index.html', 'rb') as f:
+                content = f.read()
+            start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'), ('Content-Length', str(len(content)))])
+            return [content]
+
+    if path == '/api/get-settings':
+        data = json.dumps({
+            'clerkKey': os.environ.get('CLERK_PUBLISHABLE_KEY', ''),
+            'anthropicKey': os.environ.get('ANTHROPIC_API_KEY', ''),
+            'openaiKey': os.environ.get('OPENAI_API_KEY', ''),
+            'geminiKey': os.environ.get('GEMINI_API_KEY', ''),
+            'openrouterKey': os.environ.get('OPENROUTER_API_KEY', ''),
+            'provider': os.environ.get('LLM_PROVIDER', 'openrouter'),
+            'model': os.environ.get('LLM_MODEL', 'deepseek/deepseek-chat')
+        }).encode('utf-8')
+        start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
+        return [data]
+
+    if path.startswith('/api/search'):
+        parsed = urllib.parse.parse_qs(query)
+        q = parsed.get('q', [''])[0]
+        results = search_instruments(q)
+        data = json.dumps(results).encode('utf-8')
+        start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
+        return [data]
+
+    if path.startswith('/api/cmp'):
+        parsed = urllib.parse.parse_qs(query)
+        sym = parsed.get('symbol', ['RELIANCE.NS'])[0]
+        exch = parsed.get('exchange', ['NSE'])[0]
+        cmp_data = fetch_cmp_live(sym, exch)
+        data = json.dumps(cmp_data).encode('utf-8')
+        start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
+        return [data]
+
+    if path.startswith('/api/info'):
+        parsed = urllib.parse.parse_qs(query)
+        sym = parsed.get('symbol', ['RELIANCE.NS'])[0]
+        exch = parsed.get('exchange', ['NSE'])[0]
+        info_data = get_stock_info(sym, exch)
+        data = json.dumps(info_data).encode('utf-8')
+        start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
+        return [data]
+
+    if path == '/api/research-analyze' and method == 'POST':
+        try:
+            length = int(environ.get('CONTENT_LENGTH', 0))
+            body = environ['wsgi.input'].read(length) if length > 0 else b'{}'
+            req_data = json.loads(body.decode('utf-8'))
+            
+            payload_data = req_data.get('payload', {})
+            user_prompt = req_data.get('prompt', '')
+            user_key = req_data.get('apiKey', '')
+            user_provider = req_data.get('provider', '')
+            user_model = req_data.get('model', '')
+            
+            result = call_llm_analysis(payload_data, user_prompt, user_key, user_provider, user_model)
+            data = json.dumps(result).encode('utf-8')
+            start_response('200 OK', [('Content-Type', 'application/json'), ('Content-Length', str(len(data))), ('Access-Control-Allow-Origin', '*')])
+            return [data]
+        except Exception as e:
+            err_data = json.dumps({'error': str(e)}).encode('utf-8')
+            start_response('500 Internal Server Error', [('Content-Type', 'application/json'), ('Content-Length', str(len(err_data))), ('Access-Control-Allow-Origin', '*')])
+            return [err_data]
+
+    start_response('404 Not Found', [('Content-Type', 'text/plain')])
+    return [b"Not Found"]
+
+
 if __name__ == '__main__':
     main()
