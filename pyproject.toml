@@ -11,4 +11,4 @@ dependencies = [
 ]
 
 [tool.vercel]
-entrypoint = "dashboard:app"
+entrypoint = "api/index.py"
