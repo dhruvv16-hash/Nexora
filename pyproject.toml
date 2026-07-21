@@ -9,6 +9,3 @@ dependencies = [
     "requests>=2.28.0",
     "gunicorn>=21.2.0"
 ]
-
-[tool.vercel]
-entrypoint = "api/index.py"
