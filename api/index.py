@@ -10,10 +10,12 @@ from dashboard import search_instruments, fetch_cmp_live, get_stock_info, call_l
 
 app = Flask(__name__)
 
+DEFAULT_CLERK_KEY = os.environ.get('CLERK_PUBLISHABLE_KEY', 'pk_test_bW92ZWQtYWtpdGEtMzAuY2xlcmsuYWNjb3VudHMuZGV2JA')
+
 @app.route('/api/get-settings', methods=['GET'])
 def get_settings():
     return jsonify({
-        'clerkKey': os.environ.get('CLERK_PUBLISHABLE_KEY', ''),
+        'clerkKey': DEFAULT_CLERK_KEY,
         'anthropicKey': os.environ.get('ANTHROPIC_API_KEY', ''),
         'openaiKey': os.environ.get('OPENAI_API_KEY', ''),
         'geminiKey': os.environ.get('GEMINI_API_KEY', ''),

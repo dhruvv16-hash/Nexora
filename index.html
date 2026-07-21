@@ -1537,12 +1537,7 @@
             }
 
             if (!key || key.startsWith('{{')) {
-                // Default to showing full app dashboard
-                document.getElementById('appContent').style.display = 'flex';
-                document.getElementById('loginContent').style.display = 'none';
-                document.getElementById('configContent').style.display = 'none';
-                loadSettings();
-                return;
+                key = "pk_test_bW92ZWQtYWtpdGEtMzAuY2xlcmsuYWNjb3VudHMuZGV2JA";
             }
 
             try {
