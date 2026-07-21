@@ -10,7 +10,7 @@ import yfinance as yf
 import base64
 import time
 
-PORT = 8000
+PORT = int(os.environ.get('PORT', 8000))
 CSV_FILE = 'platform_instruments.csv'
 INFO_CACHE = {} # Key: query_symbol, Value: (expiry_timestamp, info_dict)
 
