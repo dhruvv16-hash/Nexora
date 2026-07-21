@@ -2,24 +2,12 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/get-settings",
-      "destination": "/api/get-settings.py"
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "source": "/api/search",
-      "destination": "/api/search.py"
-    },
-    {
-      "source": "/api/cmp",
-      "destination": "/api/cmp.py"
-    },
-    {
-      "source": "/api/info",
-      "destination": "/api/info.py"
-    },
-    {
-      "source": "/api/research-analyze",
-      "destination": "/api/research-analyze.py"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
