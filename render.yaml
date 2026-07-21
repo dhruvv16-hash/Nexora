@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: nexora-finance
+    name: nexora
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: python dashboard.py
