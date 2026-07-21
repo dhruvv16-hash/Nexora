@@ -22,6 +22,14 @@ def get_settings():
         'model': os.environ.get('LLM_MODEL', 'deepseek/deepseek-chat')
     })
 
+@app.route('/api/save-clerk-key', methods=['GET', 'POST'])
+def save_clerk_key():
+    key = request.args.get('key', '').strip()
+    if key:
+        os.environ['CLERK_PUBLISHABLE_KEY'] = key
+        return jsonify({'success': True, 'key': key})
+    return jsonify({'error': 'No key provided'}), 400
+
 @app.route('/api/search', methods=['GET'])
 def search():
     q = request.args.get('q', '')
