@@ -132,18 +132,18 @@ def build_dataset_and_master(limit=None):
             
     # Save Fundamentals Master CSV
     df_master = pd.DataFrame(master_records)
-    df_master.to_csv("fundamentals_master.csv", index=False)
-    print(f"Saved pre-calculated fundamental database: fundamentals_master.csv ({len(df_master):,} rows).")
+    df_master.to_csv("data/fundamentals_master.csv", index=False)
+    print(f"Saved pre-calculated fundamental database: data/fundamentals_master.csv ({len(df_master):,} rows).")
     
     # Save Fine-Tuning Datasets
-    with open("fine_tuning_dataset.jsonl", "w", encoding="utf-8") as f:
+    with open("data/fine_tuning_dataset.jsonl", "w", encoding="utf-8") as f:
         for r in jsonl_records:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
-    print(f"Saved OpenRouter/OpenAI fine-tuning dataset: fine_tuning_dataset.jsonl ({len(jsonl_records):,} records).")
+    print(f"Saved OpenRouter/OpenAI fine-tuning dataset: data/fine_tuning_dataset.jsonl ({len(jsonl_records):,} records).")
     
-    with open("fine_tuning_alpaca.json", "w", encoding="utf-8") as f:
+    with open("data/fine_tuning_alpaca.json", "w", encoding="utf-8") as f:
         json.dump(alpaca_records, f, indent=2, ensure_ascii=False)
-    print(f"Saved Alpaca/Llama 3 fine-tuning dataset: fine_tuning_alpaca.json ({len(alpaca_records):,} records).")
+    print(f"Saved Alpaca/Llama 3 fine-tuning dataset: data/fine_tuning_alpaca.json ({len(alpaca_records):,} records).")
     
     print("=== BATCH DATASET & FUNDAMENTALS MASTER BUILDER COMPLETED ===")
 

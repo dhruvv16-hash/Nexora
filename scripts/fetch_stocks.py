@@ -370,45 +370,45 @@ def main():
     # NSE stock prices
     if not nse_prices.empty:
         out = _order_cols(nse_prices.sort_values(['Symbol', 'Date']))
-        out.to_csv('nse_stocks_data.csv', index=False)
+        out.to_csv('data/nse_stocks_data.csv', index=False)
         print(f"  nse_stocks_data.csv: {out['Symbol'].nunique()} stocks, {len(out):,} rows")
 
     # BSE-only stock prices
     if not bse_prices.empty:
         out = _order_cols(bse_prices.sort_values(['Symbol', 'Date']))
-        out.to_csv('bse_stocks_data.csv', index=False)
+        out.to_csv('data/bse_stocks_data.csv', index=False)
         print(f"  bse_stocks_data.csv: {out['Symbol'].nunique()} stocks, {len(out):,} rows")
 
     # US stock prices
     if not us_prices.empty:
         out = _order_cols(us_prices.sort_values(['Symbol', 'Date']))
-        out.to_csv('us_stocks_data.csv', index=False)
+        out.to_csv('data/us_stocks_data.csv', index=False)
         print(f"  us_stocks_data.csv: {out['Symbol'].nunique()} stocks, {len(out):,} rows")
 
     # Combined all prices (Indian + US)
     combined = pd.concat([nse_prices, bse_prices, us_prices], ignore_index=True)
     if not combined.empty:
         out = _order_cols(combined.sort_values(['Symbol', 'Date']))
-        out.to_csv('all_stocks_data.csv', index=False)
+        out.to_csv('data/all_stocks_data.csv', index=False)
         print(f"  all_stocks_data.csv: {out['Symbol'].nunique()} stocks, {len(out):,} rows")
 
     # MCX commodities list (prices need broker API)
     if not commodities.empty:
-        commodities.to_csv('commodities_list.csv', index=False)
+        commodities.to_csv('data/commodities_list.csv', index=False)
         print(f"  commodities_list.csv: {len(commodities)} unique MCX commodities")
 
     # Platform instruments summary
     summary = build_platform_summary(nse_symbols, bse_only, commodities, us_symbols)
-    summary.to_csv('platform_instruments.csv', index=False)
+    summary.to_csv('data/platform_instruments.csv', index=False)
     print(f"  platform_instruments.csv: {len(summary):,} instruments across platforms")
 
     # Raw Groww master
-    groww_full.to_csv('groww_instruments_master.csv', index=False)
+    groww_full.to_csv('data/groww_instruments_master.csv', index=False)
     print(f"  groww_instruments_master.csv: {len(groww_full):,} instruments")
 
     # Raw Dhan master (if downloaded)
     if not dhan_df.empty:
-        dhan_df.to_csv('dhan_instruments_master.csv', index=False)
+        dhan_df.to_csv('data/dhan_instruments_master.csv', index=False)
         print(f"  dhan_instruments_master.csv: {len(dhan_df):,} instruments")
 
     duration = time.time() - start

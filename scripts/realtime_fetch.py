@@ -168,7 +168,7 @@ def main():
                 if not processed_df.empty:
                     display_dashboard(processed_df)
                     # Save snapshot
-                    processed_df.to_csv('realtime_prices.csv', index=False)
+                    processed_df.to_csv('data/realtime_prices.csv', index=False)
                 else:
                     print("Failed to process latest prices.")
             else:

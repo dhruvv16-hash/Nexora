@@ -12,7 +12,7 @@ import time
 
 PORT = int(os.environ.get('PORT', 8000))
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CSV_FILE = os.path.join(BASE_DIR, 'platform_instruments.csv')
+CSV_FILE = os.path.join(BASE_DIR, 'data', 'platform_instruments.csv')
 INFO_CACHE = {} # Key: query_symbol, Value: (expiry_timestamp, info_dict)
 
 def get_clerk_domain(publishable_key):
@@ -174,7 +174,7 @@ else:
     df_instruments = pd.DataFrame(columns=['Symbol', 'Exchange', 'Type'])
 
 print("Loading pre-calculated fundamentals database for instant lookups...")
-fm_path = os.path.join(BASE_DIR, 'fundamentals_master.csv')
+fm_path = os.path.join(BASE_DIR, 'data', 'fundamentals_master.csv')
 if os.path.exists(fm_path):
     try:
         df_fm = pd.read_csv(fm_path, low_memory=False).fillna('N/A')

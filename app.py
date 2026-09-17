@@ -97,7 +97,7 @@ def load_datasets():
     lookup = {}
     
     # Load historical datasets into memory
-    for csv_name in ["nse_stocks_data.csv", "us_stocks_data.csv", "all_stocks_data.csv"]:
+    for csv_name in ["data/nse_stocks_data.csv", "data/us_stocks_data.csv", "data/all_stocks_data.csv"]:
         if os.path.exists(csv_name):
             try:
                 df = pd.read_csv(csv_name, low_memory=False)
@@ -123,10 +123,10 @@ def load_datasets():
             except Exception:
                 pass
 
-    # Enrich with Fundamentals Master DB
-    if os.path.exists("fundamentals_master.csv"):
+    # Enrich with Fundamentals
+    if os.path.exists("data/fundamentals_master.csv"):
         try:
-            df_fm = pd.read_csv("fundamentals_master.csv", low_memory=False)
+            df_fm = pd.read_csv("data/fundamentals_master.csv", low_memory=False)
             df_fm = df_fm.fillna('N/A')
             for _, r in df_fm.iterrows():
                 sym = str(r.get('Symbol', '')).strip()
@@ -143,8 +143,8 @@ def load_datasets():
 
     # Load instruments list for autocomplete
     instruments = []
-    if os.path.exists("platform_instruments.csv"):
-        df_inst = pd.read_csv("platform_instruments.csv", low_memory=False).fillna('')
+    if os.path.exists("data/platform_instruments.csv"):
+        df_inst = pd.read_csv("data/platform_instruments.csv", low_memory=False).fillna('')
         for _, r in df_inst.iterrows():
             instruments.append(f"{r['Symbol']} ({r['Exchange']})")
             
