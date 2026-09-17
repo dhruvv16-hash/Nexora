@@ -7,6 +7,7 @@ if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
 from dashboard import search_instruments, fetch_cmp_live, get_stock_info, call_llm_analysis
+import stock_research
 
 app = Flask(__name__)
 
@@ -51,6 +52,24 @@ def info():
     exch = request.args.get('exchange', 'NSE')
     info_data = get_stock_info(sym, exch)
     return jsonify(info_data)
+
+@app.route('/api/research', methods=['GET'])
+def research():
+    symbol = request.args.get('symbol', '').strip()
+    exchange = request.args.get('exchange', '').strip()
+    if not symbol:
+        return jsonify({'error': 'No symbol specified'}), 400
+    query_symbol = symbol
+    if not (symbol.endswith('.NS') or symbol.endswith('.BO')):
+        if exchange == 'NSE':
+            query_symbol = f"{symbol}.NS"
+        elif exchange == 'BSE':
+            query_symbol = f"{symbol}.BO"
+    try:
+        data = stock_research.run_stock_research(query_symbol)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/research-analyze', methods=['POST'])
 def research_analyze():
